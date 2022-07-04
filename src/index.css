@@ -49,4 +49,6 @@ body {
     margin-left: 20px;
   }
   
-  
+  .text-bold {
+    font-weight: bold;
+  }
