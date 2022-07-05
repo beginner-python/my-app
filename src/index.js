@@ -71,6 +71,7 @@ class Game extends React.Component {
                 },
             }],
             stepNumber: 0,
+            isAscendingOrder: true,
             xIsNext: true,
         };
     }
@@ -103,20 +104,28 @@ class Game extends React.Component {
         });
     }
 
+    reverseHistoryOrder() {
+        this.setState({
+            isAscendingOrder: !this.state.isAscendingOrder,
+        });
+    }
+
     render() {
-        const history = this.state.history;
-        const current = history[this.state.stepNumber];
+        const history = this.state.isAscendingOrder ? this.state.history : this.state.history.slice().reverse();
+        const currentStepNumber = this.state.isAscendingOrder ? this.state.stepNumber : history.length - 1 - this.state.stepNumber; 
+        const current = history[currentStepNumber];
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
-            const desc = move ?
-                `Go to move #${move}(${step.location.col}, ${step.location.row})` :
+            const moveIndex = this.state.isAscendingOrder ? move : this.state.history.length - 1 - move;
+            const desc = moveIndex ?
+                `Go to move #${moveIndex}(${step.location.col}, ${step.location.row})` :
                 `Go to game start`;
             return (
-                <li key={move}>
+                <li key={moveIndex}>
                     <button
-                        className={move === this.state.stepNumber ? 'text-bold' : ''}
-                        onClick={() => this.jumpTo(move)}
+                        className={move === currentStepNumber ? 'text-bold' : ''}
+                        onClick={() => this.jumpTo(moveIndex)}
                     >
                         {desc}
                     </button>
@@ -141,6 +150,7 @@ class Game extends React.Component {
                 <div className="game-info">
                     <div>{status}</div>
                     <ol>{moves}</ol>
+                    <button onClick={() => this.reverseHistoryOrder()}>Riverse history order</button>
                 </div>
             </div>
         );
