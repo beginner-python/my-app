@@ -53,3 +53,7 @@ ul {
 .text-bold {
   font-weight: bold;
 }
+
+.square.caused-win {
+  background: #fff799;
+}
